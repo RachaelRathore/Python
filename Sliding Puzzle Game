@@ -1,0 +1,84 @@
+import pygame
+import random
+import sys
+
+pygame.init()
+
+# Constants
+SIZE = 4
+TILE_SIZE = 100
+SCREEN_SIZE = SIZE * TILE_SIZE
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+FONT = pygame.font.Font(None, 72)
+
+# Initialize screen
+screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
+pygame.display.set_caption('Sliding Puzzle')
+
+def draw_board(board):
+    screen.fill(BLACK)
+    for row in range(SIZE):
+        for col in range(SIZE):
+            tile = board[row][col]
+            if tile != 0:
+                pygame.draw.rect(screen, WHITE, (col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+                text = FONT.render(str(tile), True, BLACK)
+                text_rect = text.get_rect(center=(col * TILE_SIZE + TILE_SIZE / 2, row * TILE_SIZE + TILE_SIZE / 2))
+                screen.blit(text, text_rect)
+    pygame.display.flip()
+
+def create_board():
+    tiles = list(range(1, SIZE * SIZE)) + [0]
+    random.shuffle(tiles)
+    board = [tiles[i * SIZE:(i + 1) * SIZE] for i in range(SIZE)]
+    return board
+
+def find_empty(board):
+    for row in range(SIZE):
+        for col in range(SIZE):
+            if board[row][col] == 0:
+                return row, col
+
+def is_solved(board):
+    return board == [list(range(i * SIZE + 1, (i + 1) * SIZE + 1)) for i in range(SIZE - 1)] + [list(range((SIZE - 1) * SIZE + 1, SIZE * SIZE)) + [0]]
+
+def move_tile(board, direction):
+    row, col = find_empty(board)
+    if direction == 'up' and row < SIZE - 1:
+        board[row][col], board[row + 1][col] = board[row + 1][col], board[row][col]
+    elif direction == 'down' and row > 0:
+        board[row][col], board[row - 1][col] = board[row - 1][col], board[row][col]
+    elif direction == 'left' and col < SIZE - 1:
+        board[row][col], board[row][col + 1] = board[row][col + 1], board[row][col]
+    elif direction == 'right' and col > 0:
+        board[row][col], board[row][col - 1] = board[row][col - 1], board[row][col]
+
+def main():
+    board = create_board()
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    move_tile(board, 'up')
+                elif event.key == pygame.K_DOWN:
+                    move_tile(board, 'down')
+                elif event.key == pygame.K_LEFT:
+                    move_tile(board, 'left')
+                elif event.key == pygame.K_RIGHT:
+                    move_tile(board, 'right')
+        
+        draw_board(board)
+        clock.tick(30)
+
+        if is_solved(board):
+            pygame.time.wait(2000)
+            board = create_board()
+
+if __name__ == '__main__':
+    main()
