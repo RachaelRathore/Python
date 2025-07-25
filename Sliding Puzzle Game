@@ -65,13 +65,13 @@ def main():
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    move_tile(board, 'up')
-                elif event.key == pygame.K_DOWN:
                     move_tile(board, 'down')
+                elif event.key == pygame.K_DOWN:
+                    move_tile(board, 'up')
                 elif event.key == pygame.K_LEFT:
-                    move_tile(board, 'left')
-                elif event.key == pygame.K_RIGHT:
                     move_tile(board, 'right')
+                elif event.key == pygame.K_RIGHT:
+                    move_tile(board, 'left')
         
         draw_board(board)
         clock.tick(30)
