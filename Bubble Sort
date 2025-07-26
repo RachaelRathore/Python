@@ -1,0 +1,14 @@
+l1 = [3, 5, 16, 23, 42, 6]
+for j in range(len(l1)):
+    swapped = False
+
+i =  0
+while i < len(l1) - 1:
+    if l1[i] > l1[i+1]:
+        l1[i],l1[i+1] = l1[i+1],l1[i]
+        swapped = True
+i = i+ 1
+if swapped == False:
+    break
+print("The sorted order is: ")
+print(l1)
