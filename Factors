@@ -1,0 +1,14 @@
+def factors(n):
+    if n < 1:
+        print("Enter an integer greater than 1.")
+        return
+    else:
+        print("The factors of ", n ," are: ")
+        counter = 1
+        while counter <= n:
+            if (n % counter) == 0:
+                print(counter)
+            counter += 1
+                
+num = int(input("Enter an integer: "))
+factors(num)
